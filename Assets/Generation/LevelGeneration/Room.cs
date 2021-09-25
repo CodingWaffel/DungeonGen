@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Room : Grid
+public class Room
 {
     Grid _parentGrid;
     int _xPos, _yPos, _width, _height;
     Node[,] _subGrid;
-    public Room(Grid grid, int xPos, int yPos, int width, int height) : base()
+
+    public int XPos => this._xPos;
+    public int YPos => this._yPos;
+    public int Width => this._width;
+    public int Height => this._height;
+    public Vector3 Position => new Vector3(XPos + Width/2, 0 , YPos + Height/2);
+    public Room(Grid grid, int xPos, int yPos, int width, int height)
     {
         this._parentGrid = grid;
         this._xPos = xPos;
@@ -31,17 +37,34 @@ public class Room : Grid
         }
     }
 
-    public override Node[,] GetGridNodes() => this._subGrid;
+    public void Create(Transform parent, RoomSkin skin){
 
-    public override Node GetNearestNodeOnGrid(Vector3 position)
-    {
-        float percentX = Mathf.Clamp01(position.x / this._width);
-        float percentY = Mathf.Clamp01(position.z / this._height);
-        int x = Mathf.RoundToInt((this._width - 1) * percentX);
-        int y = Mathf.RoundToInt((this._height - 1) * percentY);
-        
+        for (int x = 0; x < this.Width; x++)
+        {
+            for (int y = 0; y < this.Height; y++)
+            {
+                Node node = this._parentGrid.grid[this._xPos + x, this._yPos + y];
+                if(node.value == 1){
+                    GameObject.Instantiate(skin.wall, node.WorldPoint + Vector3.up * skin.wallYoffset, skin.wall.transform.rotation, parent);
+                    node.instantiated = true;
+                }
+                if(node.value == 0){
+                    GameObject.Instantiate(skin.floor, node.WorldPoint, skin.floor.transform.rotation, parent);
+                    node.instantiated = true;
+                }
+            }
+        }
 
-        return GetGridNodes()[x, y];
 
+        // foreach (Node node in this._subGrid)
+        // {
+        //     if(node.value == 1){
+        //         GameObject.Instantiate(skin.wall, node.WorldPoint + Vector3.up * skin.wallYoffset, skin.wall.transform.rotation, parent);
+        //     }
+        //     if(node.value == 0){
+        //         GameObject.Instantiate(skin.floor, node.WorldPoint, skin.floor.transform.rotation, parent);
+
+        //     }
+        // }
     }
 }

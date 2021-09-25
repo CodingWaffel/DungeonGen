@@ -25,7 +25,7 @@ public class VonPrim : IGridGenerator
         this._pointFrequency = pointFrequency;
     }
     
-	int GetMinimumIndex(int[] distances, bool[] includedNodes)
+	static int GetMinimumIndex(int[] distances, bool[] includedNodes)
 	{
 		int minimumDistance = int.MaxValue;
 		int minimumIndex = -1;
@@ -41,7 +41,7 @@ public class VonPrim : IGridGenerator
 	}
 	
     
-	void RunPrim(int[,] distanceMatrix, int numberOfNodes, out int[] parent, out int[] distances)
+	public static void RunPrim(int[,] distanceMatrix, int numberOfNodes, out int[] parent, out int[] distances)
 	{
 		parent = new int[numberOfNodes];
 		distances = new int[numberOfNodes];

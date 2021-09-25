@@ -37,35 +37,6 @@ public class Grid
         }
     }
 
-    public Grid(){
-        // int[,] randomGrid = new int[64,64];
-        // for (int x = 0; x < randomGrid.GetLength(0); x++)
-        //     for (int y = 0; y < randomGrid.GetLength(1); y++)
-        //         randomGrid[x,y] = Random.Range(0f, 1f) > .5f ? 1 : 0;
-
-        // this.gridWorldSize = new Vector2(randomGrid.GetLength(0), randomGrid.GetLength(1));
-        // this._nodeRadius = 1;
-        // _nodeDiameter = this._nodeRadius * 2;
-        // _gridSizeX = Mathf.RoundToInt(this.gridWorldSize.x / _nodeDiameter);
-        // _gridSizeY = Mathf.RoundToInt(this.gridWorldSize.y / _nodeDiameter); 
-        // // _gridSizeX = Mathf.RoundToInt(this.gridSize.x);
-        // // _gridSizeY = Mathf.RoundToInt(this.gridSize.y);  
-        // this._worldBottomLeft = Vector3.zero;// - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
-        
-        // grid = new Node[(int)this.gridWorldSize.x, (int)gridWorldSize.y];
-
-        // for(int x = 0; x < GetGridNodes().GetLength(0); x++)
-        // {
-        //     for(int y = 0; y < GetGridNodes().GetLength(1); y++)
-        //     {
-        //         Vector3 worldPoint = _worldBottomLeft + Vector3.right * (x * _nodeDiameter + _nodeRadius) + Vector3.forward * (y * _nodeDiameter + _nodeRadius);
-                
-        //         GetGridNodes()[x, y] = new Node(x, y, randomGrid[x, y], worldPoint);
-                
-        //     }
-        // }
-    }
-
     public virtual Node[,] GetGridNodes() => this.grid;
 
     public virtual Node GetNearestNodeOnGrid(Vector3 position)

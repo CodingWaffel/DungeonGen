@@ -9,11 +9,14 @@ public class Node : IHeapItem<Node>{
 
     public int gridX, gridY;
 
+    public float weight;
+
     public float gCost;
     public float hCost;
     public Node parent;
     public int value;
     public Vector3 WorldPoint{get;}
+    public bool instantiated = false;
 
     //---------------------
     

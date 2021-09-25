@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2214111834229777877}
   - component: {fileID: 2960485009234733680}
   - component: {fileID: 1076701330545761978}
+  - component: {fileID: 7721604099703494106}
   - component: {fileID: 7167732001779824752}
   m_Layer: 7
-  m_Name: block
+  m_Name: GrassWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7721604099703494106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581267423069306735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66edcc1fc7eefa84483de03fc81dedae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _destroyObject: 1
 --- !u!65 &7167732001779824752
 BoxCollider:
   m_ObjectHideFlags: 0
