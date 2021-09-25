@@ -29,7 +29,7 @@ public static class AStarPathfinder
             {
                 if (!walkableRequirement(neighbour) || closedSet.Contains(neighbour)) continue;
 
-                float newMovementCostToNeighbour = (currentNode.gCost + currentNode.weight > .7f ? 10 : 0 + GetDistance(currentNode, neighbour));
+                float newMovementCostToNeighbour = (currentNode.gCost + neighbour.weight * 10f + GetDistance(currentNode, neighbour));
                 if(newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
                     neighbour.gCost = newMovementCostToNeighbour;
                     neighbour.hCost = GetDistance(neighbour, targetNode);

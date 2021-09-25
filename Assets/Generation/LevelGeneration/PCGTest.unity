@@ -678,7 +678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &718656730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,7 +695,7 @@ MonoBehaviour:
   pixHeight: 256
   xOrg: 0
   yOrg: 0
-  scale: 1
+  scale: 20
 --- !u!64 &718656731
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2039,7 +2039,8 @@ MonoBehaviour:
   _nodeRadius: 0.5
   _attemptsToPlaceRoom: 100
   _pathNoiseWeight: 5
-  _minimumRoomsize: {x: 64, y: 64}
+  _pathNoisedScale: 120
+  _minimumRoomsize: {x: 32, y: 32}
   _maximumRoomsize: {x: 80, y: 80}
   _roomskin:
   - {fileID: 11400000, guid: ecfa139682e34af4c81ed1bfe8a01bd1, type: 2}

@@ -14,6 +14,7 @@ public class Dungeon : MonoBehaviour
     [SerializeField] float _nodeRadius = .5f;
     [SerializeField] int _attemptsToPlaceRoom = 200;
     [SerializeField] float _pathNoiseWeight = 1f;
+    [SerializeField] float _pathNoisedScale = 30f;
 
     [Header("Room Parameter")]
     [SerializeField] Vector2Int _minimumRoomsize;
@@ -47,7 +48,7 @@ public class Dungeon : MonoBehaviour
         dungeonMap = new Grid(baseGrid, this._nodeRadius);
 
         //Set Node weights
-        float[,] perlin = PerlinFilledMatrix(this._width, this._height, 0, 0, 30f);
+        float[,] perlin = PerlinFilledMatrix(this._width, this._height, 0, 0, this._pathNoisedScale);
         for (int i = 0; i < perlin.GetLength(0); i++)
         {
             for (int j = 0; j < perlin.GetLength(1); j++)
@@ -247,8 +248,10 @@ public class Dungeon : MonoBehaviour
             {
                 float xCoord = xOrg + x / width * scale;
                 float yCoord = yOrg + y / height * scale;
-                float sample = Mathf.PerlinNoise(xCoord, yCoord);
-                result[(int)x, (int)y] = 1f - Mathf.PerlinNoise(xCoord, yCoord);
+                result[(int)x, (int)y] = 1 - Mathf.PerlinNoise(xCoord, yCoord);
+                xCoord = xOrg + x / width * scale/2f;
+                yCoord = yOrg + y / height * scale/2f;
+                result[(int)x, (int)y] *= 1 - Mathf.PerlinNoise(xCoord, yCoord);
                 x++;
             }
             y++;
