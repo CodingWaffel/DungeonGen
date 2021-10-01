@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a2dfc21ad77fea4eae695d7ff93dcca, type: 3}
+  m_Name: PrimBased
+  m_EditorClassIdentifier: 
+  gridGeneratorFactory: {fileID: 11400000, guid: 76cedbae31a828f40b172d0ec75d409a, type: 2}
+  modifierFactory:
+  - {fileID: 11400000, guid: 7ab7b43de8c12ba4ebd042d63312e1ba, type: 2}
+  - {fileID: 11400000, guid: 6921714ac7dc3ef4eb0c35d0b1969dd4, type: 2}

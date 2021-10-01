@@ -7,15 +7,19 @@ using UnityEngine.Events;
 
 public class Node : IHeapItem<Node>{
 
+    //---basic values----------
     public int gridX, gridY;
+    public Vector3 WorldPoint{get;}
 
-    public float weight;
 
+    //----A* parameter-----------
     public float gCost;
     public float hCost;
     public Node parent;
+    public float weight;
+
+    //----inherent values-----
     public int value;
-    public Vector3 WorldPoint{get;}
     public bool instantiated = false;
 
     //---------------------

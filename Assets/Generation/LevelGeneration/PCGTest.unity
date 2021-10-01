@@ -2037,20 +2037,20 @@ MonoBehaviour:
   _width: 256
   _height: 256
   _nodeRadius: 0.5
-  _attemptsToPlaceRoom: 100
-  _pathNoiseWeight: 5
-  _pathNoisedScale: 120
+  _attemptsToPlaceRoom: 500
+  _pathSkin: {fileID: 11400000, guid: 3ce6e333c08468c4981a16c096322a0d, type: 2}
+  _pathNoisedScale: 130
+  _noiseWeights: 300
+  _overheadPaths: 5
   _minimumRoomsize: {x: 32, y: 32}
   _maximumRoomsize: {x: 80, y: 80}
+  _setupSkins:
+  - {fileID: 11400000, guid: d42cd44ea7e0deb47b0e37ab376e07c5, type: 2}
+  - {fileID: 11400000, guid: 66333af12917e0c4396aa7d8dcf4d64f, type: 2}
   _roomskin:
   - {fileID: 11400000, guid: ecfa139682e34af4c81ed1bfe8a01bd1, type: 2}
   - {fileID: 11400000, guid: 99dca5778e37b1e4c8da08d35f59debe, type: 2}
-  _pathSkin: {fileID: 11400000, guid: 3ce6e333c08468c4981a16c096322a0d, type: 2}
-  _gridGeneratorFactory: {fileID: 11400000, guid: 76cedbae31a828f40b172d0ec75d409a, type: 2}
-  _modifierFactory:
-  - {fileID: 11400000, guid: 7ab7b43de8c12ba4ebd042d63312e1ba, type: 2}
-  - {fileID: 11400000, guid: 6921714ac7dc3ef4eb0c35d0b1969dd4, type: 2}
-  _entryDoor: {fileID: 7801515815068155670, guid: c012ae71114f30b43a849571ca62358b, type: 3}
+  _entryDoor: {fileID: 6888373141005362362, guid: 00ed721caba51b4488ede064dfb4611b, type: 3}
   _player: {fileID: 6124706401031619138, guid: 1e99e2233e4d7d04abd6b6ada1ebcf6f, type: 3}
   _exit: {fileID: 5846114300893287272, guid: 236a078bdfd566841808ff6fdc841a4f, type: 3}
 --- !u!4 &2056594455

@@ -5,25 +5,24 @@ using System.Linq;
 
 public class Grid
 {
-    public Vector2 gridWorldSize;
-    float _nodeRadius = 1f;
     public Node[,] grid;
-    float _nodeDiameter;
-    int _gridSizeX, _gridSizeY;
     Vector3 _worldBottomLeft;
+
+    public Vector2 gridSize;
+    public Vector2 gridWorldSize;
+
+    float _nodeRadius = 1f;
+    float _nodeDiameter;
+    
 
     public Grid(int[,] baseGrid, float nodeRadius = 1f)
     {
-        this.gridWorldSize = new Vector2(baseGrid.GetLength(0), baseGrid.GetLength(1));
+        this.gridSize = new Vector2(baseGrid.GetLength(0), baseGrid.GetLength(1));
         this._nodeRadius = nodeRadius;
         _nodeDiameter = nodeRadius * 2;
-        _gridSizeX = Mathf.RoundToInt(this.gridWorldSize.x / _nodeDiameter);
-        _gridSizeY = Mathf.RoundToInt(this.gridWorldSize.y / _nodeDiameter); 
-        // _gridSizeX = Mathf.RoundToInt(this.gridSize.x);
-        // _gridSizeY = Mathf.RoundToInt(this.gridSize.y);  
-        this._worldBottomLeft = Vector3.zero;// - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
+        this.gridWorldSize = new Vector3(gridSize.x * this._nodeDiameter, gridSize.y * this._nodeDiameter);
         
-        grid = new Node[(int)this.gridWorldSize.x, (int)gridWorldSize.y];
+        grid = new Node[(int)this.gridSize.x, (int)gridSize.y];
 
         for(int x = 0; x < GetGridNodes().GetLength(0); x++)
         {
@@ -31,7 +30,7 @@ public class Grid
             {
                 Vector3 worldPoint = _worldBottomLeft + Vector3.right * (x * _nodeDiameter + nodeRadius) + Vector3.forward * (y * _nodeDiameter + nodeRadius);
                 
-                GetGridNodes()[x, y] = new Node(x, y, baseGrid[x, y], worldPoint);
+                this.grid[x, y] = new Node(x, y, baseGrid[x, y], worldPoint);
                 
             }
         }
@@ -41,13 +40,11 @@ public class Grid
 
     public virtual Node GetNearestNodeOnGrid(Vector3 position)
     {
-        // position -= this._worldBottomLeft;
-        // float percentX = Mathf.Clamp01((position.x + gridWorldSize.x / 2) / gridWorldSize.x);
-        // float percentY = Mathf.Clamp01((position.z + gridWorldSize.y / 2) / gridWorldSize.y);
+        
         float percentX = Mathf.Clamp01(position.x / gridWorldSize.x);
         float percentY = Mathf.Clamp01(position.z / gridWorldSize.y);
-        int x = Mathf.RoundToInt((_gridSizeX - 1) * percentX);
-        int y = Mathf.RoundToInt((_gridSizeY - 1) * percentY);
+        int x = Mathf.RoundToInt((gridSize.x - 1) * percentX);
+        int y = Mathf.RoundToInt((gridSize.y - 1) * percentY);
         
 
         return GetGridNodes()[x, y];

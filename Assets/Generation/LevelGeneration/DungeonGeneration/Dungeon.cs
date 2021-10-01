@@ -13,31 +13,26 @@ public class Dungeon : MonoBehaviour
     [SerializeField] int _height = 1024;
     [SerializeField] float _nodeRadius = .5f;
     [SerializeField] int _attemptsToPlaceRoom = 200;
-    [SerializeField] float _pathNoiseWeight = 1f;
+
+    [Header("Path variables")]
+    [SerializeField] RoomSkin _pathSkin;
     [SerializeField] float _pathNoisedScale = 30f;
+    [SerializeField] float _noiseWeights = 100f;
+    [SerializeField] int _overheadPaths = 5;
 
     [Header("Room Parameter")]
     [SerializeField] Vector2Int _minimumRoomsize;
     [SerializeField] Vector2Int _maximumRoomsize;
+    [SerializeField] RoomSetupSkin[] _setupSkins;
     [SerializeField] RoomSkin[] _roomskin;
-    [SerializeField] RoomSkin _pathSkin;
-    [SerializeField] PrimFactory _gridGeneratorFactory;
-    [SerializeField] List<MapModifierFactory> _modifierFactory;
     [SerializeField] GameObject _entryDoor;
 
     [Header("Player")]
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _exit;
 
-    IGridGenerator _gridGrnerator;
-    IMapModifier[] _modifier;
-    
     List<Room> _rooms;
 
-    void Awake(){
-        this._gridGrnerator = this._gridGeneratorFactory.Create();
-        this._modifier = this._modifierFactory.ConvertAll(f => f.Create()).ToArray();
-    }
     void Start() {
         
         //Init new Grid with -1
@@ -46,6 +41,7 @@ public class Dungeon : MonoBehaviour
             for (int y = 0; y < baseGrid.GetLength(1); y++)
                 baseGrid[x,y] = -1;
         dungeonMap = new Grid(baseGrid, this._nodeRadius);
+        AStarPathfinder.weightMultiplier = this._noiseWeights;
 
         //Set Node weights
         float[,] perlin = PerlinFilledMatrix(this._width, this._height, 0, 0, this._pathNoisedScale);
@@ -59,11 +55,24 @@ public class Dungeon : MonoBehaviour
         }
 
         //Generate Rooms
-        this._rooms = GenerateRooms();
+        this._rooms = GenerateRooms(this._setupSkins);
 
 
         //Connect Rooms
         List<List<Node>> paths = this.ConnectRooms(this._rooms);
+
+        int additionalConnections = 5;
+        for (int i = 0; i < additionalConnections; i++)
+        {
+            Node roomA = dungeonMap.GetNearestNodeOnGrid(this._rooms[Random.Range(0, this._rooms.Count)].Position);
+            Node roomB = dungeonMap.GetNearestNodeOnGrid(this._rooms[Random.Range(0, this._rooms.Count)].Position);
+            List<Node> newPath = AStarPathfinder.FindPath(dungeonMap, roomA, roomB, (node) => true);
+            foreach (Node node in newPath)
+            {
+                node.value = 0;
+            } 
+            paths.Add(newPath);
+        }
 
         //Define Entry-/Exitpoints TODO
         (Room, Room, float) distance = (this._rooms[0], this._rooms[0], 0f);
@@ -90,12 +99,24 @@ public class Dungeon : MonoBehaviour
         doorPosition.value = 0;
 
 
+        //Gradient for skins
+        // Vector3 gradient = new Vector3(Random.Range(0f, 1f), 0, Random.Range(0f, 1f)).normalized;
+        Vector3 gradient = new Vector3(1, 0, 0);
+
+        Vector3 endOfGradient = new Vector3(dungeonMap.gridWorldSize.x, 0f, 0f);
+        
+
         // Setup rooms with walls
         foreach (Room room in this._rooms)
         {
+            Vector3 roomPosition = room.Position;
+            float value = roomPosition.x / endOfGradient.x;
+            int skin = (int) (this._roomskin.Length * value);
+
+
             Transform roomParent = (new GameObject("Room")).transform;
             roomParent.SetParent(transform);
-            room.Create(roomParent, this._roomskin[Random.Range(0, this._roomskin.Length)]);
+            room.Create(roomParent, this._roomskin[skin]);
         }
 
         
@@ -118,29 +139,13 @@ public class Dungeon : MonoBehaviour
             }
         }
 
-        // for (int x = 0; x < dungeonMap.GetGridNodes().GetLength(0); x++)
-        // {
-        //     for (int y = 0; y < dungeonMap.GetGridNodes().GetLength(1); y++)
-        //     {
-        //         if(dungeonMap.GetGridNodes()[x,y].value == 0){
-        //             Instantiate(this._player, dungeonMap.GetGridNodes()[x,y].WorldPoint + Vector3.up, Quaternion.identity);
-        //             return;
-        //         }
-        //     }
-        // }
-
-        
-        
-
-        
         Instantiate(this._player, playerSpawnPosition.WorldPoint + Vector3.up * .5f, Quaternion.identity);
         Instantiate(this._entryDoor, doorPosition.WorldPoint + Vector3.up * .5f, this._entryDoor.transform.rotation);
         Instantiate(this._exit, dungeonMap.GetNearestNodeOnGrid(distance.Item2.Position).WorldPoint + Vector3.up * .5f, Quaternion.identity);
 
-
     }
 
-    List<Room> GenerateRooms(){
+    List<Room> GenerateRooms(RoomSetupSkin[] setups){
         List<Room> rooms = new List<Room>();
         int counter = this._attemptsToPlaceRoom;
         while(counter > 0){
@@ -158,10 +163,12 @@ public class Dungeon : MonoBehaviour
                         goto endOfWhile;
                 }
             }
-            Grid tempRoomGrid = this._gridGrnerator.GenerateMap(size.x, size.y, this._nodeRadius);
-            for (int i = 0; i < this._modifier.Length; i++)
+
+            RoomSetupSkin skin = setups[Random.Range(0, setups.Length)];
+            Grid tempRoomGrid = skin.gridGeneratorFactory.Create().GenerateMap(size.x, size.y, this._nodeRadius);
+            for (int i = 0; i < skin.modifierFactory.Count; i++)
             {
-                tempRoomGrid = this._modifier[i].Modify(tempRoomGrid);
+                tempRoomGrid = skin.modifierFactory[i].Create().Modify(tempRoomGrid);
             }
             int xa = 0;
             int ya = 0;
@@ -183,10 +190,6 @@ public class Dungeon : MonoBehaviour
 
 
         return rooms;
-    }
-
-    Room GetSingleRoom(){
-        return null;
     }
 
     List<List<Node>> ConnectRooms(List<Room> rooms){
@@ -216,7 +219,7 @@ public class Dungeon : MonoBehaviour
             Node startingNode = dungeonMap.GetNearestNodeOnGrid(rooms[i].Position);
             Node targetNode = dungeonMap.GetNearestNodeOnGrid(rooms[parents[i]].Position);
             List<Node> path = AStarPathfinder.FindPath(dungeonMap, startingNode, targetNode, (Node node) => true, false);
-            Debug.Log($"pathlength = {path.Count}");
+            
             foreach (Node node in path)
             {
                 node.value = 0;
@@ -226,14 +229,7 @@ public class Dungeon : MonoBehaviour
 
         return result;
 
-
-        
-        //linear connections
-          //connection b => horizontal/vertical connection
-        //setup path values on grid
     }
-
-    bool IgnoreNodes(Node node) => node.weight <= .8f;
 
     float[,] PerlinFilledMatrix(int widthIn, int heightIn, float xOrg, float yOrg, float scale){
         float[,] result = new float[widthIn,heightIn];

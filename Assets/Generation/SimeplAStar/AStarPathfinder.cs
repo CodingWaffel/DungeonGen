@@ -4,13 +4,14 @@ using UnityEngine;
 
 public static class AStarPathfinder
 {
+    public static float weightMultiplier = 0f;
 
     public static List<Node> FindPath(Grid grid, Node startNode, Node targetNode, System.Func<Node, bool> walkableRequirement, bool includeDiagonals = false)
     {
 
         //init open/closed Set
-        Heap<Node> openSet = new Heap<Node>((int) (grid.gridWorldSize.x * grid.gridWorldSize.y));
-        Heap<Node> closedSet = new Heap<Node>((int)(grid.gridWorldSize.x * grid.gridWorldSize.y));
+        Heap<Node> openSet = new Heap<Node>((int) (grid.gridSize.x * grid.gridSize.y));
+        Heap<Node> closedSet = new Heap<Node>((int)(grid.gridSize.x * grid.gridSize.y));
 
         openSet.Add(startNode);
 
@@ -29,7 +30,7 @@ public static class AStarPathfinder
             {
                 if (!walkableRequirement(neighbour) || closedSet.Contains(neighbour)) continue;
 
-                float newMovementCostToNeighbour = (currentNode.gCost + neighbour.weight * 10f + GetDistance(currentNode, neighbour));
+                float newMovementCostToNeighbour = (currentNode.gCost + neighbour.weight * weightMultiplier + GetDistance(currentNode, neighbour));
                 if(newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
                     neighbour.gCost = newMovementCostToNeighbour;
                     neighbour.hCost = GetDistance(neighbour, targetNode);
@@ -94,7 +95,7 @@ public static class AStarPathfinder
          }
          return  newPts;
      }
-     public static Vector3[] PathSmoothChaikin(List<Node> path, int iterations = 1){
+    public static Vector3[] PathSmoothChaikin(List<Node> path, int iterations = 1){
         if(path is null) return null;
         Vector3[] result = path.ConvertAll(n => n.WorldPoint).ToArray();
         for (int i = 0; i < iterations; i++)

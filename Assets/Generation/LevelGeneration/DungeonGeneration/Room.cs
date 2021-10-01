@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Room
 {
@@ -45,8 +46,12 @@ public class Room
             {
                 Node node = this._parentGrid.grid[this._xPos + x, this._yPos + y];
                 if(node.value == 1){
-                    GameObject.Instantiate(skin.wall, node.WorldPoint + Vector3.up * skin.wallYoffset, skin.wall.transform.rotation, parent);
-                    node.instantiated = true;
+                    if(Dungeon.DungeonMap.GetNeighbours(node, true).Any(n => n.value == 0)){
+                        GameObject.Instantiate(skin.wall, node.WorldPoint + Vector3.up * skin.wallYoffset, skin.wall.transform.rotation, parent);
+                        // GameObject.Instantiate(skin.floor, node.WorldPoint, skin.floor.transform.rotation, parent);
+                        node.instantiated = true;
+                    }
+                    
                 }
                 if(node.value == 0){
                     GameObject.Instantiate(skin.floor, node.WorldPoint, skin.floor.transform.rotation, parent);
@@ -54,17 +59,5 @@ public class Room
                 }
             }
         }
-
-
-        // foreach (Node node in this._subGrid)
-        // {
-        //     if(node.value == 1){
-        //         GameObject.Instantiate(skin.wall, node.WorldPoint + Vector3.up * skin.wallYoffset, skin.wall.transform.rotation, parent);
-        //     }
-        //     if(node.value == 0){
-        //         GameObject.Instantiate(skin.floor, node.WorldPoint, skin.floor.transform.rotation, parent);
-
-        //     }
-        // }
     }
 }
