@@ -189,7 +189,7 @@ Transform:
   - {fileID: 1954195780}
   - {fileID: 1267348560}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &125913978
 PrefabInstance:
@@ -771,7 +771,7 @@ Transform:
   m_LocalScale: {x: 256, y: 256, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &729139547
 GameObject:
@@ -1235,7 +1235,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1185301053
 Transform:
@@ -1251,6 +1251,99 @@ Transform:
   m_Father: {fileID: 260800139}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1208920827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208920829}
+  - component: {fileID: 1208920828}
+  m_Layer: 0
+  m_Name: Directional Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1208920828
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208920827}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 1
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.02
+    m_NormalBias: 0.1
+    m_NearPlane: 0.1
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1208920829
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208920827}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: 151.94887, y: -271.76227, z: -172.8512}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1267348559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,7 +1766,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1655992299
 Transform:
@@ -1688,6 +1781,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 76993197}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1689304007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1689304009}
+  - component: {fileID: 1689304008}
+  m_Layer: 0
+  m_Name: WorldGenerator (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1689304008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689304007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe1e27acbd171148a54c4388c202da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useMesh: 0
+  _dungeonMat: {fileID: 2100000, guid: 396641d6a4b586948869acbb3bb44405, type: 2}
+  _wallHeight: 20
+  _obstacleHeight: 5
+  _sacleFactor: 4
+  _width: 256
+  _height: 256
+  _nodeRadius: 0.5
+  _attemptsToPlaceRoom: 300
+  _pathSkin: {fileID: 11400000, guid: 3ce6e333c08468c4981a16c096322a0d, type: 2}
+  _pathNoisedScale: 130
+  _noiseWeights: 100
+  _overheadPaths: 2
+  _minimumRoomsize: {x: 32, y: 32}
+  _maximumRoomsize: {x: 128, y: 128}
+  _setupSkins:
+  - {fileID: 11400000, guid: d42cd44ea7e0deb47b0e37ab376e07c5, type: 2}
+  - {fileID: 11400000, guid: 66333af12917e0c4396aa7d8dcf4d64f, type: 2}
+  _roomskin:
+  - {fileID: 11400000, guid: ecfa139682e34af4c81ed1bfe8a01bd1, type: 2}
+  - {fileID: 11400000, guid: 99dca5778e37b1e4c8da08d35f59debe, type: 2}
+  _entryDoor: {fileID: 6888373141005362362, guid: 00ed721caba51b4488ede064dfb4611b, type: 3}
+  _player: {fileID: 6124706401031619138, guid: 1e99e2233e4d7d04abd6b6ada1ebcf6f, type: 3}
+  _exit: {fileID: 5846114300893287272, guid: 236a078bdfd566841808ff6fdc841a4f, type: 3}
+--- !u!4 &1689304009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689304007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1698962590
 Transform:
@@ -2021,7 +2181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2056594454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2034,6 +2194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe1e27acbd171148a54c4388c202da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useMesh: 0
+  _dungeonMat: {fileID: 2100000, guid: 396641d6a4b586948869acbb3bb44405, type: 2}
+  _wallHeight: 30
+  _obstacleHeight: 5
+  _sacleFactor: 4
   _width: 256
   _height: 256
   _nodeRadius: 0.5

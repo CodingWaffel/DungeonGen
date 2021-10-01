@@ -15,7 +15,7 @@ MonoBehaviour:
   _seed: sdfgsdhdfthdfghd546456
   _useRandomSeed: 1
   _fillPercentage: 50
-  _smoothingIteration: 4
+  _smoothingIteration: 5
   _smoothingStrength: 4
   _width: 64
   _height: 64

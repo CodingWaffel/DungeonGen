@@ -7,6 +7,12 @@ public class Dungeon : MonoBehaviour
 {
     static Grid dungeonMap;
     public static Grid DungeonMap => dungeonMap;
+    [Header("Visuals")]
+    [SerializeField] bool _useMesh;
+    [SerializeField] Material _dungeonMat;
+    [SerializeField] float _wallHeight = 20f;
+    [SerializeField] float _obstacleHeight = 5f;
+    [SerializeField] int _sacleFactor = 4;
 
     [Header("Dungeon Variables")]
     [SerializeField] int _width = 1024;
@@ -34,7 +40,16 @@ public class Dungeon : MonoBehaviour
     List<Room> _rooms;
 
     void Start() {
+        if(this._useMesh){
+            GenerateMeshDungeon();
+        }else{
+            GenerateBlockDungeon();
+        }
         
+
+    }
+
+    void GenerateMeshDungeon(){
         //Init new Grid with -1
         int[,] baseGrid = new int[this._width, this._height];
         for (int x = 0; x < baseGrid.GetLength(0); x++)
@@ -59,7 +74,77 @@ public class Dungeon : MonoBehaviour
 
 
         //Connect Rooms
-        List<List<Node>> paths = this.ConnectRooms(this._rooms);
+        List<List<Node>> paths = this.ConnectRooms(this._rooms, true);
+
+        
+
+        MapGen.MapGenerator mapGen = new MapGen.MapGenerator();
+  
+        float[,] smoothedMap = new float[this._width, this._height];
+        for (int x = 0; x <= this._width; x++)
+        {
+            for (int y = 0; y <= this._height; y++)
+            {
+                float val = 0f;
+                
+                if(x-1 >= 0 && x+1 < this._width && y-1 >= 0 && y+1 < this._height){
+
+                    for(int i = x-1; i <= x+1; i++){
+                        for (int j = y-1; j <= y+1; j++)
+                        {
+                            val += Mathf.Abs(dungeonMap.grid[i, j].value);
+                        }
+                    }
+                    smoothedMap[x,y] = val/9f;
+                }
+            }
+        }
+
+        int scalefactor = this._sacleFactor;
+        float[,] heightMap = new float[this._width * scalefactor, this._height * scalefactor];
+        for (int i = 0; i < this._width * scalefactor; i+=scalefactor)
+        {
+            for (int j = 0; j < this._height * scalefactor; j+=scalefactor)
+            {
+                float val = (smoothedMap[i/scalefactor,j/scalefactor]) * this._wallHeight;
+                for (int x = 0; x < scalefactor; x++)
+                {
+                    for (int y = 0; y < scalefactor; y++)
+                    {
+                        heightMap[i+x,j+y] = val;
+                    }
+                } 
+            }
+        }
+        mapGen.GenerateMap(heightMap, this._dungeonMat);
+    }
+
+    void GenerateBlockDungeon(){
+        //Init new Grid with -1
+        int[,] baseGrid = new int[this._width, this._height];
+        for (int x = 0; x < baseGrid.GetLength(0); x++)
+            for (int y = 0; y < baseGrid.GetLength(1); y++)
+                baseGrid[x,y] = -1;
+        dungeonMap = new Grid(baseGrid, this._nodeRadius);
+        AStarPathfinder.weightMultiplier = this._noiseWeights;
+
+        //Set Node weights
+        float[,] perlin = PerlinFilledMatrix(this._width, this._height, 0, 0, this._pathNoisedScale);
+        for (int i = 0; i < perlin.GetLength(0); i++)
+        {
+            for (int j = 0; j < perlin.GetLength(1); j++)
+            {
+                dungeonMap.grid[i,j].weight = perlin[i,j];
+                // dungeonMap.grid[i,j].weight = Random.Range(0f, 1f);
+            }
+        }
+
+        //Generate Rooms
+        this._rooms = GenerateRooms(this._setupSkins);
+
+
+        //Connect Rooms
+        List<List<Node>> paths = this.ConnectRooms(this._rooms, false);
 
         int additionalConnections = 5;
         for (int i = 0; i < additionalConnections; i++)
@@ -139,10 +224,9 @@ public class Dungeon : MonoBehaviour
             }
         }
 
-        Instantiate(this._player, playerSpawnPosition.WorldPoint + Vector3.up * .5f, Quaternion.identity);
+        Instantiate(this._player, playerSpawnPosition.WorldPoint + Vector3.up, Quaternion.identity);
         Instantiate(this._entryDoor, doorPosition.WorldPoint + Vector3.up * .5f, this._entryDoor.transform.rotation);
         Instantiate(this._exit, dungeonMap.GetNearestNodeOnGrid(distance.Item2.Position).WorldPoint + Vector3.up * .5f, Quaternion.identity);
-
     }
 
     List<Room> GenerateRooms(RoomSetupSkin[] setups){
@@ -192,7 +276,7 @@ public class Dungeon : MonoBehaviour
         return rooms;
     }
 
-    List<List<Node>> ConnectRooms(List<Room> rooms){
+    List<List<Node>> ConnectRooms(List<Room> rooms, bool broadPaths){
         List<List<Node>> result = new List<List<Node>>();
 
         int roomAmount = rooms.Count;
@@ -223,8 +307,38 @@ public class Dungeon : MonoBehaviour
             foreach (Node node in path)
             {
                 node.value = 0;
+                if(broadPaths)
+                    foreach (Node neighbour in dungeonMap.GetNeighbours(node, true))
+                    {
+                        neighbour.value = 0;
+                        foreach (Node neighbour2 in dungeonMap.GetNeighbours(neighbour, true))
+                        {
+                            neighbour2.value = 0;
+                        }
+                    }
+                
             }
             result.Add(path);
+        }
+        for (int i = 0; i < this._overheadPaths; i++)
+        {
+            Node roomA = dungeonMap.GetNearestNodeOnGrid(this._rooms[Random.Range(0, this._rooms.Count)].Position);
+            Node roomB = dungeonMap.GetNearestNodeOnGrid(this._rooms[Random.Range(0, this._rooms.Count)].Position);
+            List<Node> newPath = AStarPathfinder.FindPath(dungeonMap, roomA, roomB, (node) => true);
+            foreach (Node node in newPath)
+            {
+                node.value = 0;
+                if(broadPaths)
+                    foreach (Node neighbour in dungeonMap.GetNeighbours(node, true))
+                    {
+                        neighbour.value = 0;
+                        foreach (Node neighbour2 in dungeonMap.GetNeighbours(neighbour, true))
+                        {
+                            neighbour2.value = 0;
+                        }
+                    }
+            } 
+            result.Add(newPath);
         }
 
         return result;
