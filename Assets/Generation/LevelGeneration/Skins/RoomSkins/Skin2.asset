@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Skin2
   m_EditorClassIdentifier: 
   wall: {fileID: 1581267423069306735, guid: 7138d6d57fbe95d42bec3cb43368ebf5, type: 3}
+  wallCorner: {fileID: 4380765551183956245, guid: 15ce54a84b04deb4f87adf4fbacf13b5, type: 3}
   floor: {fileID: 9190012635436026049, guid: 8d98ae0bd4ffec54cb5a86212166b832, type: 3}
-  wallYoffset: 0.5
+  floorYoffset: -0.5

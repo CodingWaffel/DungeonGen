@@ -47,7 +47,7 @@ namespace MapGen
 
         public bool generateLODs = false;
 
-        public  void GenerateMap(float[,] map, Material mat)
+        public  void GenerateMap(float[,] map, int polyReduceFactor, Material mat)
         {
             // float[,] noiseMap = Noise.CalcNoise(MapWidth, MapHeight, offset, octaves, amplitude, frequency, persistance, lacunarity);
             // Texture2D islandShape = this.islandShape;

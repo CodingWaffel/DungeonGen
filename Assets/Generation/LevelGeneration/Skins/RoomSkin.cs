@@ -6,8 +6,9 @@ using UnityEngine;
 public class RoomSkin : ScriptableObject
 {
     public GameObject wall;
+    public GameObject wallCorner;
     public GameObject floor;
-    public float wallYoffset = 0f;
+    public float floorYoffset = 0f;
     
 
 }
