@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: c5b09b91c1e2f0e4f83cc97a18f15024, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -281,7 +281,6 @@ Transform:
   m_Children:
   - {fileID: 1185301053}
   - {fileID: 869298669}
-  - {fileID: 729139548}
   - {fileID: 1533740938}
   m_Father: {fileID: 76993197}
   m_RootOrder: 0
@@ -716,36 +715,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!1 &729139547
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 729139548}
-  m_Layer: 0
-  m_Name: FX_Fog_Small_01 (Missing Prefab)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &729139548
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729139547}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 260800139}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &787577226
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,7 +826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &869298669
 Transform:
   m_ObjectHideFlags: 0
@@ -1169,14 +1138,14 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 1, g: 0.8924298, b: 0.5990566, a: 1}
+  m_Intensity: 0.002
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -1325,6 +1294,10 @@ PrefabInstance:
     - target: {fileID: 1699914565062994, guid: b72bef528f099a14d8eab50350452f58, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699914565062994, guid: b72bef528f099a14d8eab50350452f58, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4776194311396480, guid: b72bef528f099a14d8eab50350452f58, type: 3}
       propertyPath: m_RootOrder
@@ -1485,7 +1458,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 260800139}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1533740939
 AudioSource:
@@ -1690,8 +1663,8 @@ MonoBehaviour:
   _sacleFactor: 4
   _blurFactor: 1
   _polyReduceFactor: 0
-  _width: 256
-  _height: 256
+  _width: 128
+  _height: 128
   _nodeRadius: 0.5
   _attemptsToPlaceRoom: 300
   _pathSkin: {fileID: 11400000, guid: 3ce6e333c08468c4981a16c096322a0d, type: 2}
@@ -1699,7 +1672,7 @@ MonoBehaviour:
   _noiseWeights: 100
   _overheadPaths: 5
   _minimumRoomsize: {x: 32, y: 32}
-  _maximumRoomsize: {x: 128, y: 128}
+  _maximumRoomsize: {x: 64, y: 64}
   _setupSkins:
   - {fileID: 11400000, guid: d42cd44ea7e0deb47b0e37ab376e07c5, type: 2}
   - {fileID: 11400000, guid: 66333af12917e0c4396aa7d8dcf4d64f, type: 2}
