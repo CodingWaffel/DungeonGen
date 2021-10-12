@@ -37,7 +37,7 @@ public class Grid
     }
 
     public virtual Node[,] GetGridNodes() => this.grid;
-
+    public bool IsOnGrid(int xCoord, int yCoord) => xCoord >= 0 && yCoord >= 0 && xCoord < this.gridSize.x && yCoord < this.gridSize.y;
     public virtual Node GetNearestNodeOnGrid(Vector3 position)
     {
         

@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class CellularAutomata : IGridGenerator, IMapModifier
+public class CellularAutomata : IRoomGenerator, IMapModifier
 {
     string _seed;
     bool _useRandomSeed;
@@ -31,7 +31,7 @@ public class CellularAutomata : IGridGenerator, IMapModifier
         this._useRandomSeed = false;
     }
 
-    public Grid GenerateMap(int width, int height, float nodeRadius){
+    public Grid GenerateRoom(int width, int height, float nodeRadius){
         this._grid = this.RandomFill(width, height, this._fillPercentage);
         for (int i = 0; i < this._smoothingIteration; i++)
         {

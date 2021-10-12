@@ -19,6 +19,10 @@ public class Node : IHeapItem<Node>{
     public float weight;
 
     //----inherent values-----
+    public enum NodeType{Room, Path, Door, None}
+    public enum TileType{Wall, Floor, None}
+    public NodeType _nodeType = NodeType.None;
+    public TileType _tileType = TileType.None;
     public int value;
     public bool instantiated = false;
 

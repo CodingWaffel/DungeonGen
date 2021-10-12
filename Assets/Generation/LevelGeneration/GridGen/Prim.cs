@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VonPrim : IGridGenerator
+public class VonPrim : IRoomGenerator
 {
     float _pointDenseness = .85f;
     float _pointFrequency = 1f;
@@ -69,7 +69,7 @@ public class VonPrim : IGridGenerator
 	}
 	
     
-	public Grid GenerateMap(int width, int height, float nodeRadius)
+	public Grid GenerateRoom(int width, int height, float nodeRadius)
 	{
         Grid grid = new Grid(Fill(width, height), nodeRadius);
         // Grid grid = new Grid(PerlinFilledMatrix(this._width, this._height, 0, 0, 5), nodeRadius);

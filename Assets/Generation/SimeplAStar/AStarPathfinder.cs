@@ -51,9 +51,7 @@ public static class AStarPathfinder
         // Debug.LogError("No Path, still need to implement No Path Handling!!");
         return null;
     }
-
-    public static bool DefaultWalkable(Node node) => node.value != 1;
-    
+  
 
     static List<Node> TraversePath(Node start, Node target)
     {

@@ -5,11 +5,11 @@ using System.Linq;
 
 public class Dungeon : MonoBehaviour
 {
-    static Grid dungeonMap;
-    public static Grid DungeonMap => dungeonMap;
+    public static Grid dungeonMap;
+    public DungeonGenerator _generator;
     public List<Path> Paths{get; private set;}
     [Header("Visuals")]
-    [SerializeField] bool _useMesh;
+    [SerializeField] GenerationType _generationType;
     [SerializeField] Material _dungeonMat;
     [SerializeField] float _wallHeight = 20f;
     [SerializeField] float _obstacleHeight = 5f;
@@ -46,15 +46,10 @@ public class Dungeon : MonoBehaviour
     List<Room> _rooms;
 
     void Start() {
-        this.Paths = new List<Path>();
-        if(this._useMesh){
-            GenerateMeshDungeon();
-        }else{
-            GenerateBlockDungeon();
-        }
+        this._generator.GenerateDungeon(dungeonMap);
         
-
     }
+
 
     void GenerateMeshDungeon(){
         //Init new Grid with -1
@@ -177,6 +172,17 @@ public class Dungeon : MonoBehaviour
 
         //Connect Rooms
         List<List<Node>> paths = this.ConnectRooms(this._rooms, false);
+        foreach (Node node in dungeonMap.grid)
+        {
+            if(IsWall(node)){
+                        node._tileType = Node.TileType.Wall;
+                    }else if(node.value == 0){
+                        node._tileType = Node.TileType.Floor;
+                    }else{
+                        node._tileType = Node.TileType.None;
+                    }
+                    node._nodeType = node._tileType != Node.TileType.None ? Node.NodeType.Room : Node.NodeType.None;
+        }
 
         //Define Entry-/Exitpoints TODO
         (Room, Room, float) distance = (this._rooms[0], this._rooms[0], 0f);
@@ -220,7 +226,19 @@ public class Dungeon : MonoBehaviour
 
             Transform roomParent = (new GameObject("Room")).transform;
             roomParent.SetParent(transform);
-            room.Create(roomParent, this._roomskin[skin]);
+            // room.Create(roomParent, this._roomskin[skin]);
+            // room.Create(roomParent, this.block);
+        }
+        foreach (Node node in dungeonMap.grid)
+        {
+            if(node._nodeType == Node.NodeType.Room){
+                if(node._tileType != Node.TileType.None){
+                    Instantiate(this._roomskin[0].floor, node.WorldPoint + Vector3.up * this._roomskin[0].floorYoffset, Quaternion.identity, transform);
+                }
+                if(node._tileType == Node.TileType.Wall){
+                    Instantiate(this._roomskin[0].wall, node.WorldPoint, Quaternion.identity, transform);
+                }
+            }
         }
 
         
@@ -272,13 +290,13 @@ public class Dungeon : MonoBehaviour
         Instantiate(this._entryDoor, doorPosition.WorldPoint, this._entryDoor.transform.rotation);
         Instantiate(this._exit, dungeonMap.GetNearestNodeOnGrid(distance.Item2.Position).WorldPoint, Quaternion.identity);
 
-        foreach (Room room in this._rooms)
-        {
-            foreach (Node wallSpawnPoint in room.GetWallAdjacentSpawnPoints())
-            {
-                Instantiate(this.block, wallSpawnPoint.WorldPoint, Quaternion.identity);
-            }
-        }
+        // foreach (Room room in this._rooms)
+        // {
+        //     foreach (Node wallSpawnPoint in room.GetWallAdjacentSpawnPoints())
+        //     {
+        //         Instantiate(this.block, wallSpawnPoint.WorldPoint, Quaternion.identity);
+        //     }
+        // }
     }
 
     List<Room> GenerateRooms(RoomSetupSkin[] setups){
@@ -301,7 +319,7 @@ public class Dungeon : MonoBehaviour
             }
 
             RoomSetupSkin skin = setups[Random.Range(0, setups.Length)];
-            Grid tempRoomGrid = skin.gridGeneratorFactory.Create().GenerateMap(size.x, size.y, this._nodeRadius);
+            Grid tempRoomGrid = skin.gridGeneratorFactory.Create().GenerateRoom(size.x, size.y, this._nodeRadius);
             for (int i = 0; i < skin.modifierFactory.Count; i++)
             {
                 tempRoomGrid = skin.modifierFactory[i].Create().Modify(tempRoomGrid);
@@ -313,7 +331,12 @@ public class Dungeon : MonoBehaviour
                 ya = 0;
                 for (int y = coordinate.y; y < coordinate.y + size.y; y++)
                 {
-                    dungeonMap.GetGridNodes()[x, y].value = tempRoomGrid.GetGridNodes()[xa, ya].value;
+                    Node node = dungeonMap.GetGridNodes()[x, y];
+
+                    //Set Nodevalues for later
+                    node.value = tempRoomGrid.GetGridNodes()[xa, ya].value;
+                    
+
                     ya++;
                 }
                 xa++;
@@ -327,7 +350,7 @@ public class Dungeon : MonoBehaviour
 
         return rooms;
     }
-
+    bool IsWall(Node node) => node.value == 1 && Dungeon.dungeonMap.GetNeighbours(node, true).Any(n => n.value == 0);
     List<List<Node>> ConnectRooms(List<Room> rooms, bool broadPaths){
         List<List<Node>> result = new List<List<Node>>();
 
@@ -427,6 +450,104 @@ public class Dungeon : MonoBehaviour
             y++;
         }
         return result;
+    }
+
+    class Wall{
+        public Vector3 start, end;
+        public Wall(){}
+        public Wall(Vector3 start, Vector3 end){
+            this.start = start;
+            this.end = end;
+        }
+        public Vector3 Position(){
+            float size = Size();
+            return this.start + Direction() * (size/2f);
+        }
+        public float Size() => Vector3.Distance(this.start, this.end);
+        public Vector3 Direction() => (this.end - this.start).normalized;
+    }
+
+    List<Wall> GetWalls(Grid grid, int width, int height){
+        List<Wall> result = new List<Wall>();
+        int[,] temp = new int[width, height];
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                temp[x,y] = grid.grid[x,y].value == 0 ? 0 : IsWall(grid.grid[x,y]) ? 1 : -1;
+            }
+        }
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                grid.grid[x,y].value = temp[x,y];
+            }
+        }
+        /*
+            iteriere über alle nodes
+                wenn wallnode
+                    start = verbindungspunk
+                    getdirection
+                    end = verbinsungspunk
+
+                    neuer start = end
+                    repeat bis neuer end == first start
+        */
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if(!(grid.grid[x,y].value == 1)) continue;
+
+                Wall wall = new Wall();
+                wall.start = grid.grid[x,y].WorldPoint;
+                grid.grid[x,y].value = -2; //first start
+
+                Vector2Int wallDirection = GetWallDirection(grid, grid.grid[x,y]);
+                Wall nextWall = GetWall(grid, grid.grid[x,y], wallDirection);
+
+                while(nextWall.start != nextWall.end){
+                    result.Add(nextWall);
+                    nextWall = GetWall(grid, grid.GetNearestNodeOnGrid(nextWall.end), GetWallDirection(grid, grid.GetNearestNodeOnGrid(nextWall.end)));
+                }
+
+            }
+        }
+
+        return result;
+    }
+
+    Wall GetWall(Grid grid, Node start, Vector2Int direction){
+        if(direction.x == 0 && direction.y == 0) return new Wall(start.WorldPoint, start.WorldPoint);
+        Node nextNode = grid.grid[start.gridX + direction.x, start.gridY + direction.y];
+        int counter = 1;
+
+        while(nextNode.value == 1){
+            nextNode.value = -1;
+            counter++;
+            if(grid.IsOnGrid(start.gridX + direction.x * counter, start.gridY + direction.y * counter))
+                nextNode = grid.grid[start.gridX + direction.x * counter, start.gridY + direction.y * counter];                      
+        }
+        counter--;
+        nextNode = grid.grid[start.gridX + direction.x * counter, start.gridY + direction.y * counter];
+        return new Wall(start.WorldPoint, nextNode.WorldPoint);
+
+    }
+
+    Vector2Int GetWallDirection(Grid grid, Node node){
+        List<Node> neighbours = grid.GetNeighbours(node, false);
+        foreach (Node n in neighbours)
+        {
+            if(n.value == 1)
+                return new Vector2Int(n.gridX - node.gridX, n.gridY - node.gridY);;
+        }
+        
+        return new Vector2Int(0,0);
+    }
+
+    public enum GenerationType{
+        Blocks, Mesh, Walls
     }
 
 }

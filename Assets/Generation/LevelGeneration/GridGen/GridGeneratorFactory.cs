@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class GridGeneratorFactory : ScriptableObject
 {
-    public abstract IGridGenerator Create();
+    public abstract IRoomGenerator Create();
 }
