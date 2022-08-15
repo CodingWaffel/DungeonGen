@@ -15,4 +15,5 @@ MonoBehaviour:
   wall: {fileID: 3240090131563847036, guid: 75b3c4e1f3b1e134fb440d1b0f2e7ddc, type: 3}
   wallCorner: {fileID: 5835305307800578376, guid: dacd6216a12e750458386c79c028a825, type: 3}
   floor: {fileID: 1042945839869028633, guid: 68ab88d20bed16c48b3866475f13f974, type: 3}
+  floorCorner: {fileID: 1659269731880215083, guid: cbdcd1140e6568e448ba4cc6bf1f6027, type: 3}
   floorYoffset: -0.5

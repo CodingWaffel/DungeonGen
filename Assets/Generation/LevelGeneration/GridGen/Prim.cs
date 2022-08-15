@@ -21,7 +21,7 @@ public class VonPrim : IRoomGenerator
         this._width = width;
         this._height = height;
         this._pointDenseness = pointDenseness;
-        this._boradenPaths = true;
+        this._boradenPaths = broadenPaths;
         this._pointFrequency = pointFrequency;
     }
     
@@ -91,6 +91,7 @@ public class VonPrim : IRoomGenerator
         int[] parent;
 		int[] distances;
 		RunPrim(distanceMatrix, waypoints.GetLength(0), out parent, out distances);
+        Debug.Log(waypoints.GetLength(0));
 		for (int i = 1; i < waypoints.GetLength(0); i++)
 		{
             foreach (Node node in AStarPathfinder.FindPath(grid, waypoints[parent[i]], waypoints[i], (Node node) => true, false))

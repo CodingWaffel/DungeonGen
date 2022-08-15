@@ -86,7 +86,7 @@ public class WalledDungeonGenerator : DungeonGenerator
     bool IsWall(Node node) => node._tileType == Node.TileType.Wall;
 
     Wall GetWall(Grid grid, Node start, Vector2Int direction){
-        if(direction.x == 0 && direction.y == 0) return new Wall(start.WorldPoint, start.WorldPoint);
+        if(direction.x == 0 && direction.y == 0) return new Wall(start.WorldPoint, start.WorldPoint); // sehr hacky, refactor dis shit
         Node nextNode = grid.grid[start.gridX + direction.x, start.gridY + direction.y];
         int counter = 1;
 

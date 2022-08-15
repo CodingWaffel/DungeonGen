@@ -27,7 +27,17 @@ public class GridGenerator
         }
         //paths
         List<List<Node>> paths = ConnectRooms(grid, rooms, pathProperties.overheadPaths, pathProperties.broadPaths);
-
+        foreach (List<Node> path in paths)
+        {
+            foreach (Node node in path)
+            {
+                foreach (Node neighbour in grid.GetNeighbours(node, true))
+                {
+                    neighbour._nodeType = Node.NodeType.Path;
+                    neighbour._tileType = Node.TileType.Floor;
+                }
+            }
+        }
 
 
 

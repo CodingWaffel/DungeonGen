@@ -14,10 +14,11 @@ public abstract class DungeonGenerator : MonoBehaviour
     [SerializeField] Vector2Int _minimumRoomsize;
     [SerializeField] Vector2Int _maximumRoomsize;
     [SerializeField] int _overheadPaths;
+    [SerializeField] bool _broadenPaths = true;
     [SerializeField] float _noiseWeights;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GridGenerator genner = new GridGenerator();
         GridProperties gridProps = new GridProperties();
@@ -33,7 +34,7 @@ public abstract class DungeonGenerator : MonoBehaviour
         roomProps.maximumSize = this._maximumRoomsize;
 
         PathProperties pathProps = new PathProperties();
-        pathProps.broadPaths = false;
+        pathProps.broadPaths = this._broadenPaths;
         pathProps.overheadPaths = this._overheadPaths;
         AStarPathfinder.weightMultiplier = this._noiseWeights;
         Dungeon.dungeonMap = genner.Generate(gridProps, roomProps, pathProps);
